@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>Cotizador</title>
+        <script type="text/javascript" src="js/cordova-2.5.0.js"></script>
+        <script type="text/javascript">
+        	document.addEventListener( "deviceready", function(){
+        		var elem =  document.getElementById("content");
+        		elem.innerHTML = "The device is ready!!!";
+        		navigator.notification.alert( "The device is ready", function(){}, "Cotizador", "Dale OK" );
+        	}, false );
+        </script>
+	</head>
+	<body>
+		<div id="content"></div>
+	</body>
+</html>
