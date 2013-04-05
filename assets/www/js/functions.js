@@ -1,5 +1,7 @@
 var deviceIsOnLine = false;
+var urlWebService = "http://www.cuencasbolivia.org/gapi/dataCotizador.json";
 var db;
+var parsedData;
 var dbName = "cotizador";
 var dbDescription = "Cotizador";
 var dbVersion = "1.0";
@@ -16,19 +18,27 @@ function onLoad() {
 	document.addEventListener( "offline", onOffline, false );
 }
 
+/**
+ * Event listener called after the phonegap library is loaded
+ */
 function onDeviceReady() {
-	var elem =  document.getElementById("content");
-	elem.innerHTML = "The device is ready!!!";
-	navigator.notification.alert( "The device is ready", function(){}, jsTitle, "Dale OK" );
+	/*var elem = document.getElementById("content");
+	navigator.notification.alert( "The device is ready", function(){}, jsTitle, "Dale OK" );*/
 	
 	initializeDB();
 	checkCotizadorData();
 }
 
+/**
+ * Event listener called when the device has Internet connection
+ */
 function onOnline() {
 	deviceIsOnLine = true;
 }
 
+/**
+ * Event listener called when the device has not Internet connection
+ */
 function onOffline() {
 	deviceIsOnLine = false;
 }
@@ -40,9 +50,12 @@ function initializeDB() {
 	db = window.openDatabase( dbName, dbDescription, dbVersion, dbSizeMB * 1024 * 1024 );
 }
 
+/**
+ * Function to check if there is new data to loaded in local database
+ */
 function checkCotizadorData() {
 	$.ajax({
-		url: 'http://www.cuencasbolivia.org/gapi/dataCotizador.json',
+		url: urlWebService,
 		dataType: 'json',
 		success: parseAndSaveData,
 		error: function(request, status, error) {
@@ -60,14 +73,31 @@ function checkCotizadorData() {
  * @param data, string-json
  */
 function parseAndSaveData( data ) {
-	//--console.log( data );
+	parsedData = eval( '(' + JSON.stringify( data ) + ')' );
 	
 	db.transaction( checkCurrentTables, errorCB, successCB );
 	
 	if( !tablePackagesExists ) {
 		db.transaction( createPackageTable, errorCB, successCB );
 	}
+	
+	db.transaction( insertRecords, errorCB, successCB );
 	$("#loading").hide();
+}
+
+/**
+ * Function to insert records into local database
+ * this function use the global variable 'parsedData'
+ * @param tx
+ */
+function insertRecords( tx ) {
+	var query = "";
+	
+	for( var i = 0; i < parsedData.length; i++ ) {
+		query = "INSERT INTO " + tablePackages + "(title, description, modules, image, optional_modules, fixed_modules) VALUES(?,?,?,?,?,?)";
+		tx.executeSql( query, [parsedData[i].p_titulo, parsedData[i].p_descripcion, parsedData[i].p_modulos, parsedData[i].p_imagen, parsedData[i].p_optionalmodules, parsedData[i].p_fixedmodules],
+				function(){}, errorCB );
+	}
 }
 
 /**
@@ -112,10 +142,16 @@ function checkCurrentTables( tx ) {
 	}, errorCB );
 }
 
+/**
+ * Function executed when a SQL error ocurred
+ */
 function errorCB( err ) {
 	console.log( "There was an error procesing the sql query." );
 }
 
+/**
+ * Function executed when a SQL error is success
+ */
 function successCB() {
 	console.log( "Transaction executed successfully" );
 }
