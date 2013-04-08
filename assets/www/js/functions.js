@@ -8,6 +8,8 @@ var dbVersion = "1.0";
 var dbSizeMB = 7;
 var tablePackages = "paquetes";
 var tablePackagesExists = false;
+var tableModules = "modulos";
+var tableModulesExists = false;
 
 function onLoad() {
 	/*$.mobile.allowCrossDomainPages = true;
@@ -79,10 +81,31 @@ function parseAndSaveData( data ) {
 	
 	if( !tablePackagesExists ) {
 		db.transaction( createPackageTable, errorCB, successCB );
+		db.transaction( insertPackages, errorCB, successCB );
 	}
 	
-	db.transaction( insertRecords, errorCB, successCB );
+	if( !tableModulesExists ) {
+		db.transaction( createModuleTable, errorCB, successCB );
+		db.transaction( insertModules, errorCB, successCB );
+	}
+	
 	$("#loading").hide();
+}
+
+/**
+ * Function to insert record form modules into local database
+ * this function use the global variable 'parsedData'
+ * @param tx SQLTransaction object
+ */
+function insertModules( tx ) {
+	var query = "";
+	var localData = parsedData.modules;
+	
+	for( var i = 0; i < localData.length; i++ ) {
+		query = "INSERT INTO " + tableModules + "(title, description, cost, days, image) VALUES(?,?,?,?,?)";
+		tx.executeSql( query, [localData[i].m_title, localData[i].m_desc_tec, localData[i].m_cost, localData[i].m_days, localData[i].m_imagen],
+				function(){}, errorCB );
+	}
 }
 
 /**
@@ -90,14 +113,67 @@ function parseAndSaveData( data ) {
  * this function use the global variable 'parsedData'
  * @param tx
  */
-function insertRecords( tx ) {
+function insertPackages( tx ) {
 	var query = "";
+	var localData = parsedData.packages;
 	
-	for( var i = 0; i < parsedData.length; i++ ) {
+	for( var i = 0; i < localData.length; i++ ) {
 		query = "INSERT INTO " + tablePackages + "(title, description, modules, image, optional_modules, fixed_modules) VALUES(?,?,?,?,?,?)";
-		tx.executeSql( query, [parsedData[i].p_titulo, parsedData[i].p_descripcion, parsedData[i].p_modulos, parsedData[i].p_imagen, parsedData[i].p_optionalmodules, parsedData[i].p_fixedmodules],
+		tx.executeSql( query, [localData[i].p_titulo, localData[i].p_descripcion, localData[i].p_modulos, localData[i].p_imagen, localData[i].p_optionalmodules, localData[i].p_fixedmodules],
 				function(){}, errorCB );
 	}
+}
+
+/**
+ * Function to return modules from DB
+ */
+function getModules() {
+	initializeDB();
+	
+	db.transaction( function( tx ){
+		tx.executeSql( "SELECT * FROM " + tableModules, [], function( tx, result ) {
+			var len = result.rows.length;
+			
+			for( var i = 0; i < len; i++ ) {
+				console.log( "title: " + result.rows.item(i).title );
+			}
+		}, errorCB );
+	}, errorCB, successCB );
+}
+
+/**
+ * Function to return packages from DB
+ */
+function getPackages() {
+	initializeDB();
+	
+	db.transaction( function( tx ) {
+		tx.executeSql( "SELECT * FROM " + tablePackages, [], function( tx, result ) {
+			var len = result.rows.length;
+			
+			for( var i = 0; i < len; i++ ) {
+				console.log( "title: " + result.rows.item(i).title );
+				console.log( "precio: " + result.rows.item(i).p_preciototal );
+			}
+			
+		}, errorCB );
+	}, errorCB, successCB );
+}
+
+/**
+ * Function to create modules table
+ * @param tx, SQLTransaction object
+ */
+function createModuleTable( tx ) {
+	var query = "CREATE TABLE IF NOT EXISTS " + tableModules + " (" +
+			"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			"title TEXT NOT NULL, description TEXT NULL, " +
+			"cost REAL NULL, days INTEGER NULL, " +
+			"image TEXT NULL)";
+	
+	tx.executeSql( query, [], function ( tx,  result ) {
+		console.log( "Table " + tableModules + " created successfully" );
+	}, errorCB );
 }
 
 /**
