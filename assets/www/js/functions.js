@@ -21,6 +21,13 @@ function onLoad() {
 	
 	$.mobile.loader.prototype.options.text = "loading";
 	$.mobile.loader.prototype.options.textVisible = true;
+	
+	$.mobile.loading( 'show', {
+		text: 'loading...',
+		textVisible: true,
+		theme: 'a',
+		html: ""
+		} );
 }
 
 /**
@@ -94,7 +101,7 @@ function parseAndSaveData( data ) {
 		}
 	} );
 	
-	$("#loading").hide();
+	$.mobile.loading( 'hide' );
 }
 
 /**
