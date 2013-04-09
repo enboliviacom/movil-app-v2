@@ -6,6 +6,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <title>Cotizador</title>
         <script type="text/javascript" charset="utf-8" src="js/cordova-2.5.0.js"></script>
+        <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
         <script type="text/javascript" charset="utf-8" src="js/jquery-1.8.2.min.js"></script>
         <script type="text/javascript" charset="utf-8" src="js/jquery.mobile-1.3.0.min.js"></script>
         <script type="text/javascript" charset="utf-8">
@@ -14,14 +15,19 @@
         <script type="text/javascript" charset="utf-8" src="js/functions.js"></script>
 	</head>
 	<body onload="onLoad()">
-		<div id="content"></div>
-		<img id="loading" src="images/loading.gif" width="90" height="90" />
-		<br />
-		<input type="button" onclick="getPackages()" value="get packages" /><br />
-		<input type="button" onclick="getModules()" value="get modules" />
-		<div>
-			<ul id="packages">
-			</ul>
+		<div data-role="page">
+			<img id="loading" src="images/loading.gif" width="90" height="90" />
+			<br />
+			<input type="button" onclick="getPackages()" value="get packages" /><br />
+			<div>
+				<ul id="packages" data-role="listview">
+				</ul>
+			</div>
+			<br />Módulos<br />
+			<div>
+				<ul id="modules" data-role="listview" data-theme="a" >
+				</ul>
+			</div>
 		</div>
 	</body>
 </html>

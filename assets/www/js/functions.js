@@ -18,6 +18,9 @@ function onLoad() {
 	document.addEventListener( "deviceready", onDeviceReady, false );
 	document.addEventListener( "online", onOnline, false );
 	document.addEventListener( "offline", onOffline, false );
+	
+	$.mobile.loader.prototype.options.text = "loading";
+	$.mobile.loader.prototype.options.textVisible = true;
 }
 
 /**
@@ -132,19 +135,65 @@ function insertPackages( tx ) {
 /**
  * Function to return modules from DB
  */
-function getModules( fixedModules ) { 
+function getModules( fixedModules, checkedModules, optionalModules ) { 
 	var query = "";
+	
+	$.mobile.loading( 'show', {
+		text: 'loading...',
+		textVisible: true,
+		theme: 'a',
+		html: ""
+		} );
+	
 	initializeDB();
 	
 	db.transaction( function( tx ){
+		var htmlContent = '';
+		$( "#modules" ).html( "" );
+		$( "#modules" ).listview( "refresh" );
+		
+		/* Query for fixed modules */
 		query = "SELECT * FROM " + tableModules + " WHERE id_mod IN (" + fixedModules + ")";
-		console.log("consulta " + query );
+		
 		tx.executeSql( query, [], function( tx, result ) {
 			var len = result.rows.length;
 			
 			for( var i = 0; i < len; i++ ) {
-				console.log( "title: " + result.rows.item(i).title );
+				//--console.log( "title: " + result.rows.item(i).title );
+				htmlContent += '<li><a href="">' + result.rows.item(i).title + '</a></li>';
 			}
+			
+			//--$( "#modules" ).html( $( "#modules" ).html() + htmlContent );
+			
+			/* Query for checked modules */
+			query = "SELECT * FROM " + tableModules + " WHERE id_mod IN (" + checkedModules + ")";
+			
+			tx.executeSql( query, [], function( tx, result ) {
+				var len = result.rows.length;
+				
+				for( var i = 0; i < len; i++ ) {
+					htmlContent += '<li><a href="">' + result.rows.item(i).title + '</a></li>';
+				}
+				
+				//--$( "#modules" ).html( $( "#modules" ).html() + htmlContent );
+				
+				/* Query for optional modules */
+				query = "SELECT * FROM " + tableModules + " WHERE id_mod IN (" + optionalModules + ")";
+				
+				tx.executeSql( query, [], function( tx, result ) {
+					var len = result.rows.length;
+					
+					for( var i = 0; i < len; i++ ) {
+						htmlContent += '<li><a href="">' + result.rows.item(i).title + '</a></li>';
+					}
+					
+					$( "#modules" ).html( $( "#modules" ).html() + htmlContent );
+					
+					$( "#modules" ).listview( "refresh" );
+					$.mobile.loading( 'hide' );
+
+				}, errorCB );
+			}, errorCB );
 		}, errorCB );
 	}, errorCB, successCB );
 }
@@ -163,8 +212,8 @@ function getPackages() {
 			$("#packages").html( "" );
 			
 			for( var i = 0; i < len; i++ ) {
-				console.log( "title: " + result.rows.item(i).title );
-				htmlContent += '<li><a href="#" onclick="getModules( \'' + result.rows.item(i).fixed_modules + '\' )">' + result.rows.item(i).title + '</a></li>';
+				//--console.log( "title: " + result.rows.item(i).title );
+				htmlContent += '<li><a href="#" onclick="getModules( \'' + result.rows.item(i).fixed_modules + '\', \'' + result.rows.item(i).modules + '\', \'' + result.rows.item(i).optional_modules + '\' )">' + result.rows.item(i).title + '</a></li>';
 			}
 			
 			$("#packages").html( $("#packages").html() + htmlContent );
