@@ -77,17 +77,19 @@ function checkCotizadorData() {
 function parseAndSaveData( data ) {
 	parsedData = eval( '(' + JSON.stringify( data ) + ')' );
 	
-	db.transaction( checkCurrentTables, errorCB, successCB );
-	
-	if( !tablePackagesExists ) {
-		db.transaction( createPackageTable, errorCB, successCB );
-		db.transaction( insertPackages, errorCB, successCB );
-	}
-	
-	if( !tableModulesExists ) {
-		db.transaction( createModuleTable, errorCB, successCB );
-		db.transaction( insertModules, errorCB, successCB );
-	}
+	db.transaction( checkCurrentTables, errorCB, function() {
+		console.log( "table[" + tablePackages + "] created: " + tablePackagesExists );
+		if( !tablePackagesExists ) {
+			db.transaction( createPackageTable, errorCB, successCB );
+			db.transaction( insertPackages, errorCB, successCB );
+		}
+		
+		console.log( "table[" + tableModules + "] created: " + tableModulesExists );
+		if( !tableModulesExists ) {
+			db.transaction( createModuleTable, errorCB, successCB );
+			db.transaction( insertModules, errorCB, successCB );
+		}
+	} );
 	
 	$("#loading").hide();
 }
@@ -101,9 +103,11 @@ function insertModules( tx ) {
 	var query = "";
 	var localData = parsedData.modules;
 	
+	console.log( "Inserting data into " + tableModules + " table." );
 	for( var i = 0; i < localData.length; i++ ) {
-		query = "INSERT INTO " + tableModules + "(title, description, cost, days, image) VALUES(?,?,?,?,?)";
-		tx.executeSql( query, [localData[i].m_title, localData[i].m_desc_tec, localData[i].m_cost, localData[i].m_days, localData[i].m_imagen],
+		query = "INSERT INTO " + tableModules + "(id_mod, title, description, cost, days, image) VALUES(?,?,?,?,?,?)";
+		//--console.log( "query: " + query );
+		tx.executeSql( query, [localData[i].id_modulos, localData[i].m_title, localData[i].m_desc_tec, localData[i].m_cost, localData[i].m_days, localData[i].m_imagen],
 				function(){}, errorCB );
 	}
 }
@@ -117,9 +121,10 @@ function insertPackages( tx ) {
 	var query = "";
 	var localData = parsedData.packages;
 	
+	console.log( "Inserting data into " + tablePackages + " table." );
 	for( var i = 0; i < localData.length; i++ ) {
-		query = "INSERT INTO " + tablePackages + "(title, description, modules, image, optional_modules, fixed_modules) VALUES(?,?,?,?,?,?)";
-		tx.executeSql( query, [localData[i].p_titulo, localData[i].p_descripcion, localData[i].p_modulos, localData[i].p_imagen, localData[i].p_optionalmodules, localData[i].p_fixedmodules],
+		query = "INSERT INTO " + tablePackages + "(title, description, modules, image, optional_modules, fixed_modules, precio_total, tiempo_entrega) VALUES(?,?,?,?,?,?,?,?)";
+		tx.executeSql( query, [localData[i].p_titulo, localData[i].p_descripcion, localData[i].p_modulos, localData[i].p_imagen, localData[i].p_optionalmodules, localData[i].p_fixedmodules, localData[i].p_preciototal, localData[i].p_tiempoentrega],
 				function(){}, errorCB );
 	}
 }
@@ -127,11 +132,14 @@ function insertPackages( tx ) {
 /**
  * Function to return modules from DB
  */
-function getModules() {
+function getModules( fixedModules ) { 
+	var query = "";
 	initializeDB();
 	
 	db.transaction( function( tx ){
-		tx.executeSql( "SELECT * FROM " + tableModules, [], function( tx, result ) {
+		query = "SELECT * FROM " + tableModules + " WHERE id_mod IN (" + fixedModules + ")";
+		console.log("consulta " + query );
+		tx.executeSql( query, [], function( tx, result ) {
 			var len = result.rows.length;
 			
 			for( var i = 0; i < len; i++ ) {
@@ -141,6 +149,7 @@ function getModules() {
 	}, errorCB, successCB );
 }
 
+
 /**
  * Function to return packages from DB
  */
@@ -149,12 +158,17 @@ function getPackages() {
 	
 	db.transaction( function( tx ) {
 		tx.executeSql( "SELECT * FROM " + tablePackages, [], function( tx, result ) {
+			var htmlContent = '';
 			var len = result.rows.length;
+			$("#packages").html( "" );
 			
 			for( var i = 0; i < len; i++ ) {
 				console.log( "title: " + result.rows.item(i).title );
-				console.log( "precio: " + result.rows.item(i).p_preciototal );
+				htmlContent += '<li><a href="#" onclick="getModules( \'' + result.rows.item(i).fixed_modules + '\' )">' + result.rows.item(i).title + '</a></li>';
 			}
+			
+			$("#packages").html( $("#packages").html() + htmlContent );
+			$("#packages").listview("refresh");
 			
 		}, errorCB );
 	}, errorCB, successCB );
@@ -167,12 +181,19 @@ function getPackages() {
 function createModuleTable( tx ) {
 	var query = "CREATE TABLE IF NOT EXISTS " + tableModules + " (" +
 			"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			"id_mod INTEGER NOT NULL, " +
 			"title TEXT NOT NULL, description TEXT NULL, " +
 			"cost REAL NULL, days INTEGER NULL, " +
 			"image TEXT NULL)";
 	
 	tx.executeSql( query, [], function ( tx,  result ) {
 		console.log( "Table " + tableModules + " created successfully" );
+	}, errorCB );
+	
+	query = "CREATE INDEX IF NOT EXISTS id_mod ON " + tableModules + " (id_mod)";
+	
+	tx.executeSql( query, [], function ( tx, result ) {
+		console.log( "Index in " + tableModules + " created successfully" );
 	}, errorCB );
 }
 
@@ -185,7 +206,8 @@ function createPackageTable( tx ) {
 			"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 			"title TEXT NOT NULL, description TEXT NULL, " +
 			"modules TEXT NOT NULL, image TEXT NULL, " +
-			"optional_modules TEXT NULL, fixed_modules TEXT NULL)";
+			"optional_modules TEXT NULL, fixed_modules TEXT NULL, " +
+			"precio_total TEXT NULL, tiempo_entrega TEXT NULL)";
 	
 	tx.executeSql( query, [], function ( tx, result ) {
 		console.log( "Table " + tablePackages + " created successfully" );
@@ -212,7 +234,10 @@ function checkCurrentTables( tx ) {
 			/* check if database table is already created */
 			if( result.rows.item(i).name == tablePackages ) {
 				tablePackagesExists = true;
-				break;
+			}
+			
+			if( result.rows.item(i).name == tableModules ) {
+				tableModulesExists = true;
 			}
 		}
 	}, errorCB );
