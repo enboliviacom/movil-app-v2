@@ -18,6 +18,29 @@ function onLoad() {
 	document.addEventListener( "deviceready", onDeviceReady, false );
 	document.addEventListener( "online", onOnline, false );
 	document.addEventListener( "offline", onOffline, false );
+}
+
+$( document ).bind( 'mobileinit', function(){
+	$.mobile.allowCrossDomainPages = true;
+	$.support.cors = true;
+    
+	console.log("jquery loaded");
+    
+	$.mobile.loader.prototype.options.text = "loading";
+	$.mobile.loader.prototype.options.textVisible = false;
+	$.mobile.loader.prototype.options.theme = "a";
+	$.mobile.loader.prototype.options.html = "";
+	
+	$.mobile.loading( 'show', {
+		text: 'loading...',
+		textVisible: true,
+		theme: 'a',
+		html: ""
+		} );
+});
+
+/*$(document).on("mobileinit", function() {
+	//apply overrides here
 	
 	$.mobile.loader.prototype.options.text = "loading";
 	$.mobile.loader.prototype.options.textVisible = true;
@@ -28,7 +51,7 @@ function onLoad() {
 		theme: 'a',
 		html: ""
 		} );
-}
+});*/
 
 /**
  * Event listener called after the phonegap library is loaded
@@ -99,9 +122,9 @@ function parseAndSaveData( data ) {
 			db.transaction( createModuleTable, errorCB, successCB );
 			db.transaction( insertModules, errorCB, successCB );
 		}
-	} );
 	
-	$.mobile.loading( 'hide' );
+		//--$.mobile.loading( 'hide' );
+	} );
 }
 
 /**
