@@ -66,6 +66,9 @@ p.logo{
 	display:block;
 	width:100%;
 }
+.decoration_header{
+	margin-bottom: 5px;
+}
 
 
 .heading-icon {
@@ -138,10 +141,12 @@ p.logo{
 }
 .green:active {border: 1px solid #506320; width:auto; height:auto;}
 
+
+
 .button {
 	font-size: 12px; 
 	text-decoration: none!important; 
-	padding: 2px 12px; 
+/*	padding: 2px 10px; */
 	border-radius: 3px; 
 	box-shadow: inset 0px 0px 2px #fff;
 	-o-box-shadow: inset 0px 0px 2px #fff;
@@ -153,7 +158,7 @@ p.logo{
 }
 .button:active {
 	display:inline-block; 
-	padding: 8px 12px; 
+	/*padding: 2px 10px; */
 	box-shadow: inset 0px 0px 3px #999;
 	-o-box-shadow: inset 0px 0px 3px #999;
 	-webkit-box-shadow: inset 0px 0px 3px #999;
@@ -162,13 +167,62 @@ p.logo{
 
 .button:visited {
 	display:inline-block;
-	padding: 8px 12px;
+	/*padding: 2px 10px;*/
 	margin-right:20px;
 	margin-bottom:30px; 
 	box-shadow: inset 0px 0px 3px #999;
-	-o-box-shadow: inset 0px 0px 3px #999;
 	-webkit-box-shadow: inset 0px 0px 3px #999;
 	-moz-box-shadow: inset 0px 0px 3px #999;
+	-o-box-shadow: inset 0px 0px 3px #999;
+}
+
+.blue {
+    background-color: #8EA5B5;
+    background-image: linear-gradient(#BBCBD8, #8EA5B5);
+    border: 1px solid #929BA2;
+    color: #57646D;
+    text-shadow: 1px 1px 1px #C6D4DF;
+}
+.blue:hover {
+    background-color: #BBCBD8;
+    background-image: linear-gradient(#8EA5B5, #BBCBD8);
+    border: 1px solid #656F78;
+}
+.blue:active {
+    border: 1px solid #434F5A;
+}
+.grey {
+    background-color: #E1E1E1;
+    background-image: linear-gradient(#EDEDED, #E1E1E1);
+    border: 1px solid #D0D0D0;
+    color: #444444;
+    text-shadow: 1px 1px 1px #FFFFFF;
+}
+.grey:hover {
+    background-color: #EDEDED;
+    background-image: linear-gradient(#E1E1E1, #EDEDED);
+    border: 1px solid #B0B0B0;
+}
+.grey:active {
+    border: 1px solid #666666;
+    display: block;
+    padding: 8px 12px;
+    width: auto;
+}
+.black {
+    background-color: #454545;
+    background-image: linear-gradient(#656565, #454545);
+    border: 1px solid #4D4D4D;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px #6D6D6D;
+}
+.black:hover {
+    background-color: #656565;
+    background-image: linear-gradient(#454545, #656565);
+    border: 1px solid #363636;
+}
+.black:active {
+    border: 1px solid #000000;
 }
 
 /*------------------------------------*\
@@ -196,6 +250,16 @@ p.logo{
 display: inline-block;
 margin-right: 4px;
 }
+/*#page_paquetes_detalle .ui-grid-a div.ui-input-text {*/
+
+#costo_tiempo{
+	padding: 0 15px;
+	margin-bottom: 2px;
+}
+#costo_tiempo div.ui-input-text {
+	margin-right: 5px;
+
+}
 
 /*------------------------------------*\
     $Footer
@@ -204,16 +268,17 @@ margin-right: 4px;
 	padding: 5px 0;
 	text-align: center;
 }
-#the_footer a{
-	background-image: url("../images/icon_paquetes.png");
+
+#the_footer a.paquetes{
+	/*background-image: url("../images/icon_paquetes.png");
 	background-repeat: no-repeat;
 	background-position: 100px center;
 	text-align: left;
-	width: 160px;
+	width: 160px;*/
 }
-#the_footer a span.ui-btn-inner{
-	padding: 8px 0 8px 25px;
-	border-top: none;
+#the_footer a.paquetes span.ui-btn-inner{
+	/*padding: 8px 0 8px 25px;
+	border-top: none;*/
 }
 
 
