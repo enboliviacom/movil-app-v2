@@ -10,6 +10,10 @@
 <script type="text/javascript" src="js/jquery.mobile/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.mobile/jquery.mobile-1.1.1.min.js"></script>
 <script type="text/javascript" src="js/cordova-2.5.0.js"></script>
+<script type="text/javascript" src="js/configJS.js"></script>
+<script type="text/javascript">
+	generatePackages = false;
+</script>
 <script type="text/javascript" src="js/functions.js" charset="utf-8"></script>
 </head>
 <body onload="onLoad()">
@@ -20,10 +24,19 @@
   </div><!-- header  -->
 
   <div id="page_home" data-role="content">
+  	<div id="preloader">
+      <div id="status">
+        <p class="center-text">
+          <em>Cargando el contenido ...</em>
+          <em>obteniendo información para la base de datos!</em><br>
+          <img src="images/loading.gif">
+        </p>
+      </div>
+    </div>
     <p class="logo"> &nbsp; </p>
     <div class="decoration"></div>
     <h4 class="heading-icon">L&iacute;deres en Dise&ntilde;o y desarrollo de p&aacute;ginas Web en Bolivia desde 1999.</h4>
-    <p>Nuestro negocio es la Web, nuestros servicios incluyen posicionamiento Web (SEO), Hosting, registro de dominios y el mejor manejador de contenidos <strong>Web Site Publish-er (WSP)</strong>, garantizamos su presencia en Internet.</p>
+    <p>Nuestro negocio es la Web, nuestros servicios incluyen posicionamiento Web (SEO), Hosting, registro de dominios y el mejor manejador de contenidos <strong>Web Site Publisher (WSP)</strong>, garantizamos su presencia en Internet.</p>
     <div class="decoration"></div>
     <h4 class="heading-icon">Cotizador móvil</h4>
     <p>El app desarrollado por enbolivia.com le ofrece la posibilidad de cotizar un sitio Web con los requisitos que usted tenga</p>

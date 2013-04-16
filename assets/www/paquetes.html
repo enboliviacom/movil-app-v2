@@ -10,6 +10,10 @@
 <script type="text/javascript" src="js/jquery.mobile/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.mobile/jquery.mobile-1.1.1.min.js"></script>
 <script type="text/javascript" src="js/cordova-2.5.0.js"></script>
+<script type="text/javascript" src="js/configJS.js"></script>
+<script type="text/javascript">
+	generatePackages = true;
+</script>
 <script type="text/javascript" src="js/functions.js" charset="utf-8"></script>
 </head>
 <body onload="onLoad()">
@@ -19,52 +23,7 @@
     <a data-role="button" data-icon="arrow-l" href="javascript:history.back(1)"> &nbsp;</a>
   </div>
   <div id="page_paquetes" data-role="content">
-	<ul data-role="listview" data-divider-theme="d">
-      <li>
-        <a href="#">
-          <img src="images/p_basico.png" width="80"/>
-          <h2>Paquete Básico</h2>
-          <p>Para pequeñas y medianas organizaciones con bajo presupuesto<br />
-            <span class="note">Precio: USD 350 </span>
-          </p>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <img src="images/p_tienda.png"/>
-          <h2>Paquete Tienda virtual</h2>
-          <p>Para empresas que quieren mostrar (y vender) sus productos en linea<br />
-            <span class="note">Precio: USD 1020 </span>
-          </p>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <img src="images/p_ong.png"/>
-          <h2>Paquete ONG</h2>
-          <p>Para organizaciones no gubernamentales y/o organizaciones enfocadas a la responsabilidad social.<br />
-            <span class="note">Precio: USD 1090 </span>
-          </p>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <img src="images/p_turismo.png"/>
-          <h2>Paquete Turismo</h2>
-          <p>Para organizaciones cuyas actividades se relacionan con el sector turístico tanto a nivel nacional como internacional.<br />
-            <span class="note">Precio: USD 1160 </span>
-          </p>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <img src="images/p_empresarial.png"/>
-          <h2>Paquete empresarial</h2>
-          <p>Para empresas medianas y grandes con presencia nacional o internacional que quieren ofrecer todos los servicios necesarios.<br />
-            <span class="note">Precio: USD 1470 </span>
-          </p>
-        </a>
-      </li>
+	<ul data-role="listview" data-divider-theme="d" id="packages">
  	</ul>
   </div>
 </div>
