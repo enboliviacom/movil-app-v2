@@ -307,6 +307,67 @@ function clearLocalValue() {
 	window.localStorage.clear();
 }
 
+/**
+ * Function to hide all form warnings
+ */
+function hideAllWarnings() {
+	var textTypeFields = new Array( 'name', 'empresa', 'telefono', 'email', 'lugar' );
+	
+	for( var i = 0; i < textTypeFields.length; i++ ) {
+	    $("#" + textTypeFields[i] + "_msg").hide();
+	}
+	
+	$("#email_msg_format").hide();
+}
+
+/**
+ * Function to validate form fields
+ * 
+ * @return bool
+ */
+function validateFields() {
+	// hide all previous warnings
+	hideAllWarnings();
+		
+	var err = false;
+		
+	var textTypeFields = new Array( 'name', 'empresa', 'telefono', 'email', 'lugar' );
+	
+	// Check if text fields have content
+	for( var i = 0; i < textTypeFields.length; i++ ) {
+		if( $( "#" + textTypeFields[i] ).val().length == 0 ) {
+			$( "#" + textTypeFields[i] + "_msg" ).toggle();
+			err = true;
+		}
+	}
+		
+	// Check if there is a valid email address
+	if( !checkEmail( $("#email").val() ) && !err ) {
+		$("#email_msg_format").toggle();
+		err = true;
+	}
+	
+	return err;
+}
+
+/**
+ * Function to validate email address
+ */
+function checkEmail( sEmail ) {
+	var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	
+	if( filter.test( sEmail ) )
+		return true;
+	else
+		return false;
+}
+
+/**
+ * Function to change the values of Time and Cost in detail package page
+ * @param time float, time it will take to develop
+ * @param cost flaot, cost it will take to develop
+ * @param element DOM element
+ */
 function changeValues( time, cost, element ) {
 	var cTime = parseFloat( $( '#time' ).val() );
 	var cCost = parseFloat( $( '#cost' ).val() );

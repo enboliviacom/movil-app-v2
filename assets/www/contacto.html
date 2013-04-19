@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>enbolivia.com - cotizador</title>
+  <title>enbolivia.com - Cotizador m&oacute;vil</title>
   <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <link rel="stylesheet" href="js/jquery.mobile/jquery.mobile-1.1.1.min.css" />
@@ -16,15 +16,6 @@
   <script type="text/javascript" src="js/functions.js" charset="utf-8"></script>
 </head>
 <body onload="onLoad()">
-
-  <div id="preloader">
-   <div id="status">
-     <p class="center-text">
-       <em>Cargando el contenido ...</em>
-       <em>La carga va adepender de su velocidad de coneccion!</em>
-     </p>
-   </div>
- </div> <!-- preloader  -->
 
  <div data-role="page" id="page_index">
   <div data-role="header" class="ui-bar-d" data-position="fixed">
@@ -42,18 +33,24 @@
       <li class="list-web"><span>Sitio Web:</span> <a class="button green" href="http://www.enbolivia.com">www.enbolivia.com</a></li>
     </ul><br>
     <h4 class="heading-icon">Datos necesarios para crear la cotización</h4>
-    <form>
-      <input type="text" name="name" value="" placeholder="Nombre" />   
-      <input type="text" name="empresa" value="" placeholder="Empresa" />   
-      <input type="tel" name="telefono" value="" placeholder="Teléfono" />   
-      <input type="email" name="email" value="" placeholder="ejemplo@email.com " />   
-      <input type="text" name="lugar" value="" placeholder="Ciudad / Pais" />   
+    <form name="contact-form" id="contact-form" action="">
+      <input id="name" type="text" name="name" value="" placeholder="Nombre" />
+      <span id="name_msg" class="hide_elem">* Nombre es requerido</span>   
+      <input id="empresa" type="text" name="empresa" value="" placeholder="Empresa" />
+      <span id="empresa_msg" class="hide_elem">* Empresa es requerido</span>   
+      <input id="telefono" type="tel" name="telefono" value="" placeholder="Teléfono" />
+      <span id="telefono_msg" class="hide_elem">* Teléfono es requerido</span>   
+      <input id="email" type="email" name="email" value="" placeholder="ejemplo@email.com " />
+      <span id="email_msg" class="hide_elem">* E-mail es requerido</span>
+      <span id="email_msg_format" class="hide_elem">* E-mail tiene un formato inválido</span>
+      <input id="lugar" type="text" name="lugar" value="" placeholder="Ciudad / Pais" />
+      <span id="lugar_msg" class="hide_elem">Ciudad / País es requerido</span>   
     </form>
   </div><!-- page_paquetes_detalle -->
 
   <div id="the_footer" data-role="footer" class="ui-bar-d" data-position="fixed">
       <a class="button grey" href="tel:22422542" data-icon="info">Llámenos</a>
-      <a class="button green" href="#" data-icon="check">Enviar</a>
+      <a class="button green" href="#" onclick="validateFields()" data-icon="check">Enviar</a>
   </div>
 </div><!-- page_index  -->
 

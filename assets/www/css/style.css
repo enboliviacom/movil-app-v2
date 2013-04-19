@@ -180,8 +180,8 @@ p.logo{
 .button:visited {
 	display:inline-block;
 	/*padding: 2px 10px;*/
-	margin-right:20px;
-	margin-bottom:30px; 
+	/*margin-right:20px;*/
+	/*margin-bottom:30px;*/ 
 	box-shadow: inset 0px 0px 3px #999;
 	-webkit-box-shadow: inset 0px 0px 3px #999;
 	-moz-box-shadow: inset 0px 0px 3px #999;
@@ -293,5 +293,7 @@ margin-right: 4px;
 	border-top: none;*/
 }
 
-
-
+.hide_elem {
+	display: none;
+	color: #cc0000;
+}
